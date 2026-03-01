@@ -1,4 +1,7 @@
 import buffer.TerminalBuffer
+import models.Color
+import models.Style
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -66,5 +69,18 @@ class TerminalBufferWriteOverrideTest {
         assertEquals(1, buffer.getScrollBackLineCount())
 
         assertEquals("L2   ", buffer.getBufferLine(0))
+    }
+
+    @Test
+    fun `attributes persist during writes`() {
+        val buffer = TerminalBuffer(5, 2, 5)
+        buffer.setAttributes(Color.RED, Color.BLACK, Style(bold = true))
+
+        buffer.writeTextOverriding("A")
+
+        val (fg, bg, style) = buffer.getAttributesAt(buffer.getGlobalRowIndex(0), 0)
+        assertEquals(Color.RED, fg)
+        assertEquals(Color.BLACK, bg)
+        assertTrue(style.bold)
     }
 }

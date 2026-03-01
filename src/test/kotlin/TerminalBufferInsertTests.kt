@@ -1,5 +1,5 @@
-package buffer
 
+import buffer.TerminalBuffer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
