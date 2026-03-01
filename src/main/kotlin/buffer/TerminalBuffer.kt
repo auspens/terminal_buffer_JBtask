@@ -50,6 +50,23 @@ class TerminalBuffer (
         }
     }
 
+    fun writeTextInserting(text:String) {
+        var currentRow = allLines[getGlobalRowIndex(cursorRow)]
+        for (char in text) {
+            if (char == '\n' || cursorColumn >= width) {
+                handleWrap()
+                currentRow = allLines[getGlobalRowIndex(cursorRow)]
+                if (char == '\n') continue
+            }
+            currentRow.add(
+                cursorColumn,
+                Cell(char, currentForeground, currentBackground, currentStyle)
+            )
+            currentRow.removeAt(width)
+            cursorColumn++
+        }
+    }
+
     private fun handleWrap(){
         if(cursorRow >= height - 1){
             insertEmptyLineAtBottom()
