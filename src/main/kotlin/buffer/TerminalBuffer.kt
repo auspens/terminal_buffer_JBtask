@@ -76,6 +76,27 @@ class TerminalBuffer (
         cursorColumn = 0
     }
 
+    fun fillCurrentLine(char: Char? = null) {
+        val currentRow = allLines[getGlobalRowIndex(cursorRow)]
+        for (i in 0 until width) {
+            currentRow[i] = Cell(char, currentForeground, currentBackground, currentStyle)
+        }
+    }
+
+    fun clearScreen() {
+        val screenStart = allLines.size - height
+        for (i in screenStart until allLines.size) {
+            allLines[i] = createEmptyLine()
+        }
+        setCursorPosition(0, 0)
+    }
+
+    fun clearAll() {
+        allLines.clear()
+        repeat(height) { allLines.add(createEmptyLine()) }
+        setCursorPosition(0, 0)
+    }
+
     fun setAttributes(fg:Color, bg:Color, style:Style){
         this.currentForeground = fg
         this.currentBackground = bg
